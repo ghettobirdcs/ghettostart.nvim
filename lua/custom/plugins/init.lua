@@ -1,12 +1,8 @@
--- You can add your own plugins here or in other files in this directory!
---  I promise not to create any merge conflicts in this directory :)
---
--- See the kickstart.nvim README for more information
 return {
   {
     'mbbill/undotree',
     config = function()
-      vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
+      vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = 'Toggle undotree' })
     end,
   },
 
@@ -15,8 +11,8 @@ return {
     config = function()
       local mark = require 'harpoon.mark'
       local ui = require 'harpoon.ui'
-      vim.keymap.set('n', '<leader>a', mark.add_file)
-      vim.keymap.set('n', '<C-e>', ui.toggle_quick_menu)
+      vim.keymap.set('n', '<leader>a', mark.add_file, { desc = 'Add file to harpoon' })
+      vim.keymap.set('n', '<C-0>', ui.toggle_quick_menu)
       vim.keymap.set('n', '<C-1>', function()
         ui.nav_file(1)
       end)
@@ -29,6 +25,22 @@ return {
       vim.keymap.set('n', '<C-4>', function()
         ui.nav_file(4)
       end)
+    end,
+  },
+
+  {
+    'mfussenegger/nvim-dap-python',
+    dependencies = { 'mfussenegger/nvim-dap', 'microsoft/debugpy' },
+    config = function() end,
+  },
+
+  { 'astrand/xclip', config = function() end },
+
+  {
+    'startup-nvim/startup.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-file-browser.nvim' },
+    config = function()
+      require('startup').setup { theme = 'dashboard' }
     end,
   },
 }
