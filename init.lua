@@ -16,7 +16,7 @@ vim.g.have_nerd_font = true
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -593,7 +593,18 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {},
+        pylsp = {
+          settings = {
+            pylsp = {
+              plugins = {
+                pycodestyle = {
+                  -- Ignore line too long error
+                  ignore = { 'E501' },
+                },
+              },
+            },
+          },
+        },
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -636,7 +647,6 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
-        'pyright', -- Python lsp
         'debugpy', -- Python debugger
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -817,82 +827,82 @@ require('lazy').setup({
     end,
   },
 
-  -- { -- Default color scheme (w/ trans background)
-  --   'folke/tokyonight.nvim',
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
-  --   config = function()
-  --     ---@diagnostic disable-next-line: missing-fields
-  --     require('tokyonight').setup {
-  --       styles = {
-  --         comments = { italic = false },
-  --       },
-  --     }
-  --     vim.cmd.colorscheme 'tokyonight-storm'
-  --     -- Transparent background
-  --     vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-  --     vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
-  --   end,
-  -- },
-
-  {
-    'scottmckendry/cyberdream.nvim',
-    lazy = false,
-    priority = 1000,
+  { -- Default color scheme
+    'folke/tokyonight.nvim',
+    priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
-      require('cyberdream').setup {
-        -- Set light or dark variant
-        variant = 'auto',
-        transparent = true,
-        saturation = 0.9,
-        italic_comments = false,
-        -- Replace all fillchars with ' ' for the ultimate clean look
-        hide_fillchars = false,
-        -- Apply a modern borderless look to pickers like Telescope, Snacks Picker & Fzf-Lua
-        borderless_pickers = false,
-        -- Set terminal colors used in `:terminal`
-        terminal_colors = true,
-        -- Improve start up time by caching highlights. Generate cache with :CyberdreamBuildCache and clear with :CyberdreamClearCache
-        cache = false,
-        -- Override highlight groups with your own colour values
-
-        highlights = {
-          -- Highlight groups to override, adding new groups is also possible
-          -- See `:h highlight-groups` for a list of highlight groups or run `:hi` to see all groups and their current values
-          -- Example:
-          Comment = { fg = '#78ffac', bg = 'NONE', italic = true },
-          -- More examples can be found in `lua/cyberdream/extensions/*.lua`
-        },
-
-        -- Override a highlight group entirely using the built-in colour palette
-        -- overrides = function(colors) -- NOTE: This function nullifies the `highlights` option
-        --   -- Example:
-        --   return {
-        --     Comment = { fg = '#32a860', bg = 'NONE', italic = false },
-        --     ['@property'] = { fg = colors.magenta, bold = true },
-        --   }
-        -- end,
-
-        -- Override a color entirely
-        colors = {
-          -- For a list of colors see `lua/cyberdream/colours.lua`
-          -- Example:
-          bg = '#000000',
-          green = '#00ff00',
-          magenta = '#ff00ff',
-        },
-
-        -- Disable or enable colorscheme extensions
-        extensions = {
-          telescope = true,
-          notify = true,
-          mini = true,
-          lazy = true,
-          treesitter = true,
+      ---@diagnostic disable-next-line: missing-fields
+      require('tokyonight').setup {
+        styles = {
+          comments = { italic = false },
         },
       }
-      vim.cmd.colorscheme 'cyberdream'
+      vim.cmd.colorscheme 'tokyonight-moon'
+      -- Transparent background
+      --vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+      --vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
     end,
   },
+
+  -- {
+  --   'scottmckendry/cyberdream.nvim',
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     require('cyberdream').setup {
+  --       -- Set light or dark variant
+  --       variant = 'auto',
+  --       transparent = true,
+  --       saturation = 0.9,
+  --       italic_comments = false,
+  --       -- Replace all fillchars with ' ' for the ultimate clean look
+  --       hide_fillchars = false,
+  --       -- Apply a modern borderless look to pickers like Telescope, Snacks Picker & Fzf-Lua
+  --       borderless_pickers = false,
+  --       -- Set terminal colors used in `:terminal`
+  --       terminal_colors = true,
+  --       -- Improve start up time by caching highlights. Generate cache with :CyberdreamBuildCache and clear with :CyberdreamClearCache
+  --       cache = false,
+  --       -- Override highlight groups with your own colour values
+  --
+  --       highlights = {
+  --         -- Highlight groups to override, adding new groups is also possible
+  --         -- See `:h highlight-groups` for a list of highlight groups or run `:hi` to see all groups and their current values
+  --         -- Example:
+  --         Comment = { fg = '#78ffac', bg = 'NONE', italic = true },
+  --         -- More examples can be found in `lua/cyberdream/extensions/*.lua`
+  --       },
+  --
+  --       -- Override a highlight group entirely using the built-in colour palette
+  --       -- overrides = function(colors) -- NOTE: This function nullifies the `highlights` option
+  --       --   -- Example:
+  --       --   return {
+  --       --     Comment = { fg = '#32a860', bg = 'NONE', italic = false },
+  --       --     ['@property'] = { fg = colors.magenta, bold = true },
+  --       --   }
+  --       -- end,
+  --
+  --       -- Override a color entirely
+  --       colors = {
+  --         -- For a list of colors see `lua/cyberdream/colours.lua`
+  --         -- Example:
+  --         bg = '#000000',
+  --         green = '#00ff00',
+  --         magenta = '#ff00ff',
+  --       },
+  --
+  --       -- Disable or enable colorscheme extensions
+  --       extensions = {
+  --         telescope = true,
+  --         notify = true,
+  --         mini = true,
+  --         lazy = true,
+  --         treesitter = true,
+  --       },
+  --     }
+  --     vim.cmd.colorscheme 'cyberdream'
+  --   end,
+  -- },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },

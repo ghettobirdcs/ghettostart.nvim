@@ -43,4 +43,6 @@ return {
       require('startup').setup { theme = 'dashboard' }
     end,
   },
+
+  { 'tpope/vim-fugitive', config = function() end },
 }
